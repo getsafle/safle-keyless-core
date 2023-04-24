@@ -1,0 +1,108 @@
+version: "3.3"
+services:
+  traefik:
+    image: "traefik:v2.0.0-rc3"
+    container_name: "traefik"
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myhttpchallenge.acme.httpchallenge=true"
+      - "--certificatesresolvers.myhttpchallenge.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myhttpchallenge.acme.email=admin@getsafle.com"
+      - "--certificatesresolvers.myhttpchallenge.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:[a-z-.]+}`)"
+      - "traefik.http.routers.http-catchall.entrypoints=web"
+      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+    volumes:
+      - "./letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  # certificatesResolvers:
+  #   labels:
+  #     - "disablePropagationCheck: true"
+  
+  webapp:
+    image: "keyless:latest"
+    container_name: "keyless"
+    build: .
+    ports: 
+      - "3000:3000"
+    environment: 
+      - ENV=dev
+      - GENERATE_SOURCEMAP=false
+      - REACT_APP_ALLOW_BETA_ACCESS="allowed"
+      - REACT_APP_ASSETS_JSON_URL="https://chain-data-safle.netlify.app/assets.json"
+      - REACT_APP_AUTH_URL="https://test-auth.getsafle.com"
+      - REACT_APP_BSCSCAN_KEY="BKNDBGEATH2VSSNK95XA538KG8J76C1E74"
+      - REACT_APP_CHAINS_JSON_URL="https://chain-data-safle.netlify.app/chains.json"
+      - REACT_APP_CHECKING_SERVICE_URL="https://dev-checking.getsafle.com/"
+      - REACT_APP_CHECKING_SERVICE_URL_DEV="https://test-check.getsafle.com/"
+      - REACT_APP_CMC_API_KEY="7ac54877-7f59-47d2-afb9-8ed8ef8846eb"
+      - REACT_APP_ENV_MODE="development"
+      - REACT_APP_ETHERSCAN_KEY="SK52ICX7BJTNRVXP66D29XRU9D5QKVVMJC"
+      - REACT_APP_ETH_NODE="https://mainnet.infura.io/v3/8faaf4fcbdcc4dd0bee8c87eb4b0315b"
+      - REACT_APP_FILE_API="https://file.getsafle.com"
+      - REACT_APP_FILE_API_DEV="https://test-file.getsafle.com"
+      - REACT_APP_HIDE_ASSETS="false"
+      - REACT_APP_HIDE_LOGS="false"
+      - REACT_APP_HIDE_SWAPS="false"
+      - REACT_APP_INFURA_KEY="8faaf4fcbdcc4dd0bee8c87eb4b0315b"
+      - REACT_APP_LINK_ABOUT="https://getsafle.com/"
+      # - REACT_APP_LINK_DISCORD="https://discord.gg/aj9YRCfh26"
+      # - REACT_APP_LINK_FACEBOOK="https://facebook.com"
+      # - REACT_APP_LINK_INSTAGRAM="https://www.instagram.com/GetSafle/"
+      # - REACT_APP_LINK_LINKEDIN="https://linkedin.com"
+      # - REACT_APP_LINK_MEDIUM="https://safle.medium.com/"
+      # - REACT_APP_LINK_PRIVACY="https://www.notion.so/getsafle/Getsafle-Privacy-Policy-4fa62dd356cb4398acdf93f3185c2504"
+      # - REACT_APP_LINK_TELEGRAM="https://t.me/getsafle"
+      # - REACT_APP_LINK_TERMS="https://www.notion.so/getsafle/Getsafle-Terms-and-Conditions-3f9ef6712cb94f488c67e51ba4e0da0e"
+      # - REACT_APP_LINK_TWITTER="https://twitter.com/GetSafle"
+      - REACT_APP_MARKET_SERVICE_URL="https://dev-data.getsafle.com/"
+      - REACT_APP_MARKET_SERVICE_URL_DEV="https://test-data.getsafle.com/"
+      - REACT_APP_NOTIFICATION_SERVICE_URL="https://dev-notification.getsafle.com"
+      - REACT_APP_NOTIFICATION_SERVICE_URL_DEV="https://test-notification.getsafle.com"
+      - REACT_APP_POLYGONSCAN_KEY="BgoGMHvB5R7iMNhZ2BoJd470aSZNEz9t2N8PBOWD"
+      - REACT_APP_RECAPTCHA_SITE_KEY="6Lf8HVIaAAAAADBeZl94tnebAST20hEZOHWzQMBD"
+      - REACT_APP_RELAYER_SERVICE_URL="https://relayer.getsafle.com"
+      - REACT_APP_RELAYER_SERVICE_URL_DEV="https://test-relayer.getsafle.com"
+      - REACT_APP_SIGNUP_NODE="https://polygon-mainnet.infura.io/v3/8faaf4fcbdcc4dd0bee8c87eb4b0315b"
+      - REACT_APP_SIGNUP_WEB3_PROVIDER="https://rpc-mainnet.matic.network"
+      - REACT_APP_SWAP_URL="https://dev-swap.getsafle.com/"
+      - REACT_APP_SWAP_URL_DEV="https://test-swap.getsafle.com/"
+      - REACT_APP_TRANSAK_ENVIRONMENT="STAGING"
+      - REACT_APP_TRANSAK_PRODUCTION_API_KEY="46e4e5de-63a3-475c-ae13-1100500879e0"
+      - REACT_APP_TRANSAK_STAGING_API_KEY="bdc0b598-733d-4bf6-847f-5169c584a91a"
+      - REACT_APP_WALLETS_URL="https://dev-wallet.getsafle.com"
+      - REACT_APP_WALLETS_URL_DEV="https://test-wallet.getsafle.com"
+      - REACT_APP_WEB3_PROVIDER_URL="https://polygon-mumbai.infura.io/v3/8faaf4fcbdcc4dd0bee8c87eb4b0315b"
+      - SAFFLE_API_KEY="f910c085-93a2-4e3d-8fd4-7864d02ce265"
+      - SAFFLE_API_SECRET="FWBZx4sNYXni2LopCF0DCZewg5Si6LWH"
+      - SKIP_PREFLIGHT_CHECK=true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.subhanshu.rule=Host(`test-devops.getsafle.com`)"
+      - "traefik.http.routers.subhanshu.entrypoints=websecure"
+      - "traefik.http.routers.subhanshu.tls.certresolver=myhttpchallenge"
+
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $HOME/.docker/config.json:/config.json
+    command: --interval 30
+    environment:
+      - WATCHTOWER_DEBUG=true
+      - WATCHTOWER_INCLUDE_STOPPED=true
+      - WATCHTOWER_REVIVE_STOPPED=true
+      - WATCHTOWER_POLL_INTERVAL=60  
