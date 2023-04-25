@@ -9,7 +9,7 @@ on:
       - master
     paths:
       - package.json
-      - CHANGELOG
+      - CHANGELOG.md
 
 jobs:
   build:
