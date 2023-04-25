@@ -1,4 +1,4 @@
-# safle-keyless-core
+# Safle-keyless-core
 
 This package allows a dapp to enable "Sign In With Safle" as a mechanism to enable their users to interact with the dapp using a custom safle widget and perform transactions using their safle password and pin in a non custodial manner.
 
