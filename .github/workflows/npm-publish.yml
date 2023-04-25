@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - main
-#     paths:
-#       - package.json
-#       - CHANGELOG
+    paths:
+      - package.json
+      - CHANGELOG
 
 jobs:
   publish-npm:
