@@ -1,1 +1,2 @@
 # safle-keyless-core
+<test>
