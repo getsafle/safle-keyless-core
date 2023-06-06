@@ -1,0 +1,241 @@
+.container {
+  background: #050c1a;
+  height: 100vh;
+}
+.header {
+  padding: 0.5rem 12rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid gray;
+}
+.header__logo img {
+  width: 70px;
+}
+.header__title h1 {
+  color: #fff;
+  font-size: 16px;
+}
+.header button {
+  color: #44de8c;
+  outline: none;
+  border: 2px solid #44de8c;
+  padding: 15px;
+  margin: 10px 0px;
+  display: block;
+  width: 150px;
+  border-radius: 30px;
+  font-weight: bold;
+  background: #050717;
+}
+.header button:hover {
+  box-shadow: 0px 0px 10px gray;
+}
+.disconnect .inner {
+  background: green;
+  border-radius: 50%;
+  display: inline-block;
+  min-width: 15px;
+}
+.header button > .outer {
+  padding: 2px;
+  margin-right: 10px;
+  border: 2px solid green;
+  border-radius: 50%;
+  display: inline-block;
+  min-width: 15px;
+  background: #44de8c;
+  opacity: 2;
+}
+
+.main {
+  max-width: 800px;
+  margin: 1rem auto;
+  background: #050c1a;
+  padding: 2rem;
+  border-radius: 10px;
+}
+.main__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.main__form label {
+  display: block;
+  padding-bottom: 7px;
+  font-size: 14px;
+  color: #7a8599;
+  font-weight: 400;
+  /*min-width: 152px;*/
+}
+.box {
+  background: #fff;
+  padding: 10px 10px;
+  border-radius: 10px;
+  padding: 15px;
+}
+.top_box {
+  display: flex;
+}
+.top_box_left {
+  flex-basis: 62%;
+  border-right: 1px solid gainsboro;
+}
+.top_box_right {
+  flex-basis: 35%;
+  margin-left: 10px;
+}
+.bottom_box {
+  display: flex;
+  column-gap: 20px;
+}
+.bottom_box_left {
+  flex-basis: 55%;
+}
+.bottom_box_right {
+  flex: 1;
+}
+.main button {
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+.blue_button {
+  background: #007aff;
+  border-radius: 4px;
+  box-shadow: 1px 1px 5px gray;
+}
+.refresh_button {
+  background: #44de8c;
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin-left: 10px;
+  font-size: 12px !important;
+}
+input {
+  padding: 8px 12px;
+  outline: none;
+  border: 1px solid #acb5c3;
+  border-radius: 10px;
+  color: #acb5c3;
+  width: 90%;
+  margin-bottom: 15px;
+}
+.top_box_left input {
+  color: #7a8599;
+  height: 30px;
+  padding-right: 155px;
+  width: 60%;
+}
+.top_box_right input {
+  height: 20px;
+}
+.button_relative {
+  position: relative;
+}
+.button_relative button {
+  position: absolute;
+  top: 33px;
+  left: 67%;
+  width: 25%;
+  padding: 8px 0px;
+  margin-left: 9px;
+}
+.button_1 {
+  padding: 15px;
+  width: 30%;
+}
+.button_2 {
+  padding: 14px 45px;
+  float: right;
+}
+.custom_select_box {
+  position: relative;
+  width: 100%;
+}
+.menu {
+  background: #fff;
+  color: #6e6f7a;
+  border-radius: 10px;
+  margin-top: 7px;
+  width: 50%;
+  position: absolute;
+  z-index: 100;
+  right: 0px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+.selected_menu_item {
+  border: 1px solid #acb5c3;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0px 3px;
+  padding: 0px 5px;
+  height: 40px;
+}
+.menu_label {
+  color: #92939b;
+  border-bottom: 1px solid #ebecf0;
+  padding: 10px 10px;
+}
+.menuItems {
+  padding: 10px 10px;
+}
+.balance {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+.balance p {
+  margin: 1px;
+}
+
+.bottom_box_left textarea {
+  background: #e5eeff;
+  border: 1px solid #acb5c3;
+  border-radius: 4px;
+  width: 98%;
+  height: 130px;
+  resize: none;
+}
+
+.bottom_box_right label {
+  margin: 4px 2px;
+}
+.bottom_box_right input {
+  height: 20px;
+}
+.signature {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 35px;
+}
+.signature label {
+  padding-top: 10px;
+}
+.signature input {
+  width: 250px;
+}
+
+@media only screen and (max-width: 780px) {
+  .top_box,
+  .bottom_box {
+    display: block;
+  }
+  .top_box_left,
+  .bottom_box_left {
+    border: none;
+    margin-bottom: 10px;
+  }
+  .signature {
+    flex-direction: column;
+  }
+  .top_box_left input {
+    width: 40%;
+  }
+}
