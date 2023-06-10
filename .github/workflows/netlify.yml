@@ -3,10 +3,9 @@ name: "deploy to netlify"
 on: 
   push:
     branches:
-      - main
-    paths:
-      - package.json
-      - CHANGELOG
+    - main
+    - feature-*
+    - bugfix-*
 
 jobs:
   build:
