@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent</title>
+    <script src="https://unpkg.com/penpal@6.1.0/dist/penpal.min.js"></script>
+</head>
+<body>
+    <h1>Parent Page</h1>
+    <button onclick="connectToSafleDemo()">Connect To Safle Wallet</button>
+    <div id="childFrameContainer">
+
+        <iframe id="childFrame" scrolling="auto"  src="http://localhost:3001"></iframe>
+        <span id="childFrameCloseBtn" onclick="closeChildFrame()">Close</span>
+    </div>
+    
+    <pre id="addressJson"></pre>
+    
+    <div id="sendTransaction" style="display: none;" className="bottom_box_right box">
+        <div>
+            <label>Send Token</label> <br/>
+            <input type="text" placeholder="To" onchange="setTokenSendTo(this.value)" />
+        </div>
+        <div>
+            <input
+                type="number"
+                placeholder="Token Amount"
+                onchange="setTokenAmount(this.value)"
+            />
+        </div>
+        <div>
+            <button onClick={onSendClick()}>Send Transaction</button>
+        </div>
+    </div>
+
+    <div id="signTransaction" style="display: none;" className="bottom_box_right box">
+        <div>
+            <label>Sign Message</label> <br/>
+            <input type="text" placeholder="To" onchange="setSignMsg(this.value)" />
+        </div>
+        <div>
+            <button onClick="onSignClick()">Sign Message</button>
+        </div>
+    </div>
+
+    <script>
+   
+    const childFrameContainer = document.getElementById('childFrameContainer');
+    const childFrame = document.getElementById('childFrame');
+    childFrame.style.display = "none"; 
+    childFrameContainer.style.display = "none"; 
+    let sendTo = ''
+    let sendAmount = ''
+    let signMsg = ''
+    let tokens,balance,currentChain
+
+    //Start connection
+    let connection = Penpal.connectToChild({
+            iframe: childFrame,
+            methods: {
+                parentMethod: (res) => {
+                        console.log('Parent method called!', res);
+                        showResults(res)
+                        if(res.loginSuccess) {
+                            tokens= res.tokens
+                            balance= res.balance
+                            currentChain= res.currentChain
+                            childFrame.style.display = "none"; 
+                            childFrameContainer.style.display = "none"; 
+                            const sendTransaction = document.getElementById('sendTransaction');
+                            sendTransaction.style.display = "block"
+                            const signTransaction = document.getElementById('signTransaction');
+                            signTransaction.style.display = "block"
+                        }
+                        return 'Hello from Parent!';
+                    }
+                }
+            });
+        
+        //Login method
+        function loginToSafleDemo(){
+            connection.promise.then(child => {
+            child.init(true).then(result => {
+                console.log("parent result--->",result);
+            }).catch(error => {console.log(error);})
+        });
+        }
+
+        function connectToSafleDemo(){
+            childFrame.style.display = "block";
+            childFrameContainer.style.display = "block";
+            loginToSafleDemo()
+        }
+
+       
+        //Send Transaction methods:
+
+        const setTokenSendTo =(val)=>{
+            sendTo= val
+        }
+
+        const setTokenAmount =(val) => {
+            sendAmount = val
+        }
+       
+        const onSendClick= ()=>{
+            childFrame.style.display = "none";
+            childFrameContainer.style.display = "none";
+            childFrame.style.display = "block";
+            childFrameContainer.style.display = "block";
+            connection.promise.then(child => {
+                child.sendAmountTransaction(sendTo, sendAmount).then(result => {
+                    console.log("parent result--->",result);
+                });
+            });
+            
+        }
+
+        //Sign Methods:
+
+        const setSignMsg =(val)=>{
+            signMsg= val
+        }
+        
+        const onSignClick= ()=>{
+            childFrame.style.display = "none";
+            childFrameContainer.style.display = "none";
+            childFrame.style.display = "block";
+            childFrameContainer.style.display = "block";
+            connection.promise.then(child => {
+                child.signMessage(signMsg, null).then(result => {
+                    console.log("parent result--->",result);
+                    childFrame.style.display = "none";
+                    childFrameContainer.style.display = "none";
+                });
+            });
+            
+        }
+
+        // extras
+        function showResults(json){
+            const addressJson = document.getElementById('addressJson');
+            addressJson.innerHTML = JSON.stringify(json, null, 2);
+        }
+
+        function closeChildFrame(json){
+            childFrame.style.display = "none"; 
+            childFrameContainer.style.display = "none"; 
+        }
+
+
+    </script>
+     <style>
+        #childFrameContainer {
+        }
+        #childFrameCloseBtn {
+            position: absolute;
+            right: 20px; 
+            top: 20px;
+            background: rgba(255,255,255,0.5);
+            padding: 5px 5px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        #childFrame{
+            position: absolute;
+            top:10px;
+            right:10px;
+            width: 360px; 
+            min-height: 770px;
+            border-radius: 20px;
+            overflow-y: auto;
+            display: none;
+            border: 0px;
+        }
+        #sendTransaction{
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+
+</body>
+</html>
